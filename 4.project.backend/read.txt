@@ -1,0 +1,16 @@
+db
+    dbconnect.js
+    index.js
+
+
+MODELS
+      
+       USER.MODEL.JS
+
+UTILS
+        APIERROR
+        APIRESPONSE
+        ASYNCHANDLER
+        cloudinary
+index.js
+app.js
