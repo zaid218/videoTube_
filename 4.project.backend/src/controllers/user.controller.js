@@ -20,7 +20,7 @@ const generateAccessAndRefreshToken = async(userId) => {
         return { accessToken, refreshToken };
     } catch (error) {
         throw new ApiError(500, "Something went wrong while generating refresh and access token.");
-    }
+    }  
 };
 
 const registerUser = asyncHandler( async(req, res) => {
@@ -56,17 +56,16 @@ const registerUser = asyncHandler( async(req, res) => {
 
     const avatarLocalPath = req.files?.avatar[0]?.path
     // console.log("avatarLocalPath", avatarLocalPath);
-
-    let coverImageLocalPath;
-    if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
-        coverImageLocalPath = req.files.coverImage[0].path
-    }
+    const coverImageLocalPath=req.files?.coverImage?.[0]?.path;  
+    // let coverImageLocalPath;
+    // if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+    //     coverImageLocalPath = req.files.coverImage[0].path
+    // }
 
     if (!avatarLocalPath) throw new ApiError(400, "Avatar file is required")
-    console.log('below is avatar')
+   
     const avatar = await uploadOnCloudinary(avatarLocalPath).catch((error) => console.log(error))
-   console.log(avatar)
-    console.log('above is cover ')
+   
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
 
     // console.log(avatar);null
@@ -106,12 +105,6 @@ const loginUser = asyncHandler(async(req, res) => {
     // password check
     // access and refresh token
     // send tokens in cookies
-    // //req body se data lao
-    //email or username base
-    //find the user
-    //password check 
-    //access and refresh token
-    //send cookie
     const {email, username, password} = req.body;
 
     if (!(username || email)) {
@@ -195,9 +188,10 @@ const refreshAccessToken = asyncHandler(async(req, res) => {
         throw new ApiError(401, "unauthorized request");
     }
 
+    
     const user = await User.findOne({
         refreshToken: incomingRefreshToken
-    });
+    }); 
 
     if (!user) {
         throw new ApiError(401, "Invalid refresh token");
@@ -389,14 +383,14 @@ const getUserChannelProfile = asyncHandler(async(req, res) => {
             $lookup: {
                 from: "subscriptions",
                 localField: "_id",
-                foreignField: "subscriber",
+                foreignField: "subscriber", 
                 as: "subscribedTo"
             }
         },
         {
             $addFields: {
                 subcribersCount: {
-                    $size: "$subscribers"
+                    $size: "$subscribers" //USE DOLLAR SIGN BEFORE SUBSCRIBERS BECAUSE IT IS FIELD
                 },
                 channelsSubscribedToCount: {
                     $size: "$subscribedTo"
@@ -444,7 +438,7 @@ const getWatchHistory = asyncHandler(async(req, res) => {
     const user = await User.aggregate([
         {
             $match: {
-                _id: new mongoose.Types.ObjectId(req.user._id)
+                _id: new mongoose.Types.ObjectId(req.user._id)   //AGGREGATION PIPELINE KA SAARA CODE AISE HI JAATA HAI,MONGOOSE NHI KAAM KRTA 
             }
         },
         {
@@ -455,7 +449,7 @@ const getWatchHistory = asyncHandler(async(req, res) => {
                 as: "watchHistory",
                 pipeline: [
                     {
-                        $lookup: {
+                        $lookup: {   
                             from: "users",
                             localField: "owner",
                             foreignField: "_id",
