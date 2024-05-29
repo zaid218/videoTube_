@@ -54,7 +54,7 @@ const registerUser = asyncHandler( async(req, res) => {
     
     // console.log("req.files", req.files);
 
-    const avatarLocalPath = req.files?.avatar[0]?.path
+    const avatarLocalPath = req.files?.avatar?.[0]?.path
     // console.log("avatarLocalPath", avatarLocalPath);
     const coverImageLocalPath=req.files?.coverImage?.[0]?.path;  
     // let coverImageLocalPath;
@@ -134,6 +134,7 @@ const loginUser = asyncHandler(async(req, res) => {
         secure: true,
         sameSite: "None"
     };
+
 
     return res
         .status(200)

@@ -1,3 +1,7 @@
+CONTROLLER 
+          user.controller.js
+          
+
 db
     dbconnect.js
     index.js
