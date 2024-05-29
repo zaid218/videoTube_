@@ -14,7 +14,7 @@ import { Like } from "../models/like.model.js";
 // get all videos based on query, sort, pagination
 const getAllVideos = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query;
-    console.log(userId);
+    
     const pipeline = [];
 
     // for using Full Text based search u need to create a search index in mongoDB atlas
@@ -41,7 +41,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
         pipeline.push({
             $match: {
-                owner: new mongoose.Types.ObjectId(userId)
+                owner:  mongoose.Types.ObjectId(userId)
             }
         });
     }
